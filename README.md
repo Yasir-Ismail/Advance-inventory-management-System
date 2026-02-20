@@ -25,16 +25,16 @@ A professional, feature-rich Inventory Management System (IMS) built with PHP an
 
 ### 1. Database Setup
 1. Create a new database named `inventory_system` in your MySQL server (e.g., via phpMyAdmin).
-2. Import the [schema.sql](file:///e:/github/Advance-inventory-management-System/database/schema.sql) file located in the `database/` folder.
+2. Import the [schema.sql] file located in the `database/` folder.
 
 ### 2. Configuration
-1. Open [includes/db.php](file:///e:/github/Advance-inventory-management-System/includes/db.php).
+1. Open [includes/db.php]
 2. Update the following variables with your local database credentials:
    ```php
    $host = 'localhost';
    $db   = 'inventory_system';
    $user = 'root';
-   $pass = ''; // Your password
+   $pass = ''; // Empty for local server
    ```
 
 ### 3. Running Locally
