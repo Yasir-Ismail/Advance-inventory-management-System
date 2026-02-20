@@ -55,59 +55,82 @@ $sales = $pdo->query("SELECT s.*, p.name as product_name
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Out (Sales) - IMS</title>
+    <title>Stock Out (Sales) - IMS Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        .main-content { margin-left: 250px; padding: 20px; }
-        @media (max-width: 768px) { .main-content { margin-left: 0; } }
-    </style>
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
-<body>
+<body class="bg-light">
 
-<div class="container-fluid">
-    <div class="row">
-        <?php include 'layout/sidebar.php'; ?>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-auto">
+            <?php include 'layout/sidebar.php'; ?>
+        </div>
 
-        <main class="col-md-10 ms-sm-auto main-content">
-            <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Stock Out (Sales)</h1>
+        <!-- Main Content -->
+        <main class="col main-wrapper animate-fade-in">
+            <div class="d-flex justify-content-between align-items-center mb-5">
                 <div>
-                    <a href="utils/export_csv.php?type=sales" class="btn btn-outline-success me-2">
-                        <i class="bi bi-file-earmark-excel"></i> Export CSV
+                    <h2 class="fw-bold mb-1">Stock Out (Sales)</h2>
+                    <p class="text-muted small">Record and track inventory sales and reductions</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="utils/export_csv.php?type=sales" class="btn btn-outline-success d-flex align-items-center gap-2 px-3 py-2 rounded-3 shadow-sm bg-white border">
+                        <i class="bi bi-file-earmark-excel"></i> <span>Export CSV</span>
                     </a>
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#saleModal">
-                        <i class="bi bi-cart-dash"></i> New Sale
+                    <button class="btn btn-danger d-flex align-items-center gap-2 px-4 py-2 rounded-3 shadow-sm border-0 bg-grad-ruby" data-bs-toggle="modal" data-bs-target="#saleModal">
+                        <i class="bi bi-cart-dash"></i> <span>New Sale</span>
                     </button>
                 </div>
             </div>
 
             <?php if ($success): ?>
-                <div class="alert alert-success alert-dismissible fade show"><?php echo $success; ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+                <div class="alert alert-success alert-dismissible fade show premium-card border-0 mb-4 shadow-sm" style="border-left: 5px solid var(--accent-emerald) !important;">
+                    <i class="bi bi-check-circle-fill me-2"></i> <?php echo $success; ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
             <?php endif; ?>
+
             <?php if ($error): ?>
-                <div class="alert alert-danger alert-dismissible fade show"><?php echo $error; ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+                <div class="alert alert-danger alert-dismissible fade show premium-card border-0 mb-4 shadow-sm" style="border-left: 5px solid var(--accent-ruby) !important;">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> <?php echo $error; ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
             <?php endif; ?>
 
             <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Date</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Selling Price</th>
-                            <th>Total</th>
+                <table class="table align-middle">
+                    <thead>
+                        <tr class="text-muted small uppercase">
+                            <th class="ps-3">DATE / TIME</th>
+                            <th>PRODUCT</th>
+                            <th>QUANTITY</th>
+                            <th>SELLING PRICE</th>
+                            <th class="pe-3">TOTAL</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($sales as $s): ?>
                             <tr>
-                                <td class="small"><?php echo date('Y-m-d H:i', strtotime($s['sale_date'])); ?></td>
-                                <td class="fw-bold"><?php echo $s['product_name']; ?></td>
-                                <td><?php echo $s['quantity']; ?></td>
-                                <td>$<?php echo number_format($s['selling_price'], 2); ?></td>
-                                <td class="fw-bold">$<?php echo number_format($s['total_amount'], 2); ?></td>
+                                <td class="ps-3 py-4">
+                                    <div class="d-flex flex-column">
+                                        <span class="fw-bold text-dark"><?php echo date('M d, Y', strtotime($s['sale_date'])); ?></span>
+                                        <span class="text-muted small"><?php echo date('H:i A', strtotime($s['sale_date'])); ?></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="bg-danger-subtle rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="bi bi-cart-dash text-danger small"></i>
+                                        </div>
+                                        <span class="fw-medium"><?php echo $s['product_name']; ?></span>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-light text-dark fw-normal px-3 py-2"><?php echo $s['quantity']; ?> pcs</span></td>
+                                <td class="text-muted">$<?php echo number_format($s['selling_price'], 2); ?></td>
+                                <td class="pe-3 fw-bold text-accent-emerald">$<?php echo number_format($s['total_amount'], 2); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -116,6 +139,11 @@ $sales = $pdo->query("SELECT s.*, p.name as product_name
         </main>
     </div>
 </div>
+
+<style>
+    .text-accent-emerald { color: #10b981; }
+    .bg-grad-ruby { background: linear-gradient(135deg, #f43f5e, #e11d48) !important; color: white !important; }
+</style>
 
 <!-- Sale Modal -->
 <div class="modal fade" id="saleModal" tabindex="-1">

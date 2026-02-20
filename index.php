@@ -21,109 +21,150 @@ $recent_sales = $pdo->query("SELECT s.*, pr.name as product_name FROM sales s JO
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - IMS</title>
+    <title>Dashboard - IMS Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body { background-color: #f8f9fa; }
-        .main-content { margin-left: 250px; padding: 20px; }
-        @media (max-width: 768px) { .main-content { margin-left: 0; } }
-        .card-stat { border: none; border-radius: 12px; transition: 0.3s; color: white; }
-        .card-stat:hover { transform: translateY(-5px); }
-    </style>
 </head>
-<body>
+<body class="bg-light">
 
-<div class="container-fluid">
-    <div class="row">
-        <?php include 'layout/sidebar.php'; ?>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-auto">
+            <?php include 'layout/sidebar.php'; ?>
+        </div>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
-                <h1 class="h2">Dashboard Summary</h1>
-                <div class="text-muted">Welcome, <?php echo $_SESSION['user_name']; ?></div>
-            </div>
-
-            <!-- Stats Overview -->
-            <div class="row g-4 mb-4">
-                <div class="col-md-3">
-                    <div class="card card-stat bg-primary p-3">
-                        <h6>Total Products</h3>
-                        <h2 class="fw-bold"><?php echo $total_products; ?></h2>
+        <!-- Main Content -->
+        <main class="col main-wrapper">
+            <div class="animate-fade-in">
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <div>
+                        <h2 class="fw-bold mb-1">Dashboard Overview</h2>
+                        <p class="text-muted small">Welcome back, <span class="fw-medium text-primary"><?php echo $_SESSION['user_name']; ?></span></p>
+                    </div>
+                    <div class="bg-white p-2 rounded-3 shadow-sm border">
+                        <span class="text-muted small px-2"><i class="bi bi-calendar3 me-2"></i><?php echo date('D, M d Y'); ?></span>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card card-stat bg-success p-3">
-                        <h6>Inventory Quantity</h3>
-                        <h2 class="fw-bold"><?php echo $total_quantity; ?></h2>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card card-stat bg-info p-3">
-                        <h6>Stock Value</h3>
-                        <h2 class="fw-bold">$<?php echo number_format($total_value, 2); ?></h2>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card card-stat bg-danger p-3">
-                        <h6>Low Stock Alerts</h3>
-                        <h2 class="fw-bold"><?php echo $low_stock; ?></h2>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row mb-4">
-                <div class="col-lg-8">
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header bg-white">Recent Transactions</div>
-                        <div class="card-body">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#purchases">Purchases</button>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#sales">Sales</button>
-                                </li>
-                            </ul>
+                <!-- Stats Overview -->
+                <div class="row g-4 mb-5">
+                    <div class="col-md-3">
+                        <div class="premium-card stat-card bg-grad-sky p-4">
+                            <i class="bi bi-box-seam card-icon-bg"></i>
+                            <h6 class="opacity-75 mb-2">Total Products</h6>
+                            <h2 class="fw-bold mb-0"><?php echo $total_products; ?></h2>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="premium-card stat-card bg-grad-emerald p-4">
+                            <i class="bi bi-stack card-icon-bg"></i>
+                            <h6 class="opacity-75 mb-2">Inventory Quantity</h6>
+                            <h2 class="fw-bold mb-0"><?php echo $total_quantity; ?></h2>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="premium-card stat-card bg-grad-sunset p-4">
+                            <i class="bi bi-currency-dollar card-icon-bg"></i>
+                            <h6 class="opacity-75 mb-2">Stock Value</h6>
+                            <h2 class="fw-bold mb-0">$<?php echo number_format($total_value, 2); ?></h2>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="premium-card stat-card bg-grad-ruby p-4">
+                            <i class="bi bi-exclamation-triangle card-icon-bg"></i>
+                            <h6 class="opacity-75 mb-2">Low Stock Alerts</h6>
+                            <h2 class="fw-bold mb-0"><?php echo $low_stock; ?></h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="premium-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="fw-bold mb-0">Recent Transactions</h5>
+                                <ul class="nav nav-pills nav-pills-custom" id="transactionTabs">
+                                    <li class="nav-item">
+                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#purchases">Purchases</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#sales">Sales</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            
                             <div class="tab-content mt-3">
                                 <div class="tab-pane fade show active" id="purchases">
-                                    <table class="table table-hover">
-                                        <thead><tr><th>Product</th><th>Qty</th><th>Total</th><th>Date</th></tr></thead>
-                                        <tbody>
-                                            <?php foreach ($recent_purchases as $p): ?>
-                                                <tr>
-                                                    <td><?php echo $p['product_name']; ?></td>
-                                                    <td><?php echo $p['quantity']; ?></td>
-                                                    <td>$<?php echo number_format($p['total_amount'], 2); ?></td>
-                                                    <td class="small"><?php echo date('M d, H:i', strtotime($p['purchase_date'])); ?></td>
+                                    <div class="table-responsive">
+                                        <table class="table align-middle">
+                                            <thead>
+                                                <tr class="text-muted small">
+                                                    <th>PRODUCT</th>
+                                                    <th>QUANTITY</th>
+                                                    <th>TOTAL AMOUNT</th>
+                                                    <th>DATE</th>
                                                 </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($recent_purchases as $p): ?>
+                                                    <tr>
+                                                        <td class="fw-medium"><?php echo $p['product_name']; ?></td>
+                                                        <td><span class="badge bg-light text-dark fw-normal"><?php echo $p['quantity']; ?> pcs</span></td>
+                                                        <td class="text-primary fw-bold">$<?php echo number_format($p['total_amount'], 2); ?></td>
+                                                        <td class="text-muted small"><?php echo date('M d, H:i', strtotime($p['purchase_date'])); ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="sales">
-                                    <table class="table table-hover">
-                                        <thead><tr><th>Product</th><th>Qty</th><th>Total</th><th>Date</th></tr></thead>
-                                        <tbody>
-                                            <?php foreach ($recent_sales as $s): ?>
-                                                <tr>
-                                                    <td><?php echo $s['product_name']; ?></td>
-                                                    <td><?php echo $s['quantity']; ?></td>
-                                                    <td>$<?php echo number_format($s['total_amount'], 2); ?></td>
-                                                    <td class="small"><?php echo date('M d, H:i', strtotime($s['sale_date'])); ?></td>
+                                    <div class="table-responsive">
+                                        <table class="table align-middle">
+                                            <thead>
+                                                <tr class="text-muted small">
+                                                    <th>PRODUCT</th>
+                                                    <th>QUANTITY</th>
+                                                    <th>TOTAL AMOUNT</th>
+                                                    <th>DATE</th>
                                                 </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($recent_sales as $s): ?>
+                                                    <tr>
+                                                        <td class="fw-medium"><?php echo $s['product_name']; ?></td>
+                                                        <td><span class="badge bg-light text-dark fw-normal"><?php echo $s['quantity']; ?> pcs</span></td>
+                                                        <td class="text-accent-emerald fw-bold">$<?php echo number_format($s['total_amount'], 2); ?></td>
+                                                        <td class="text-muted small"><?php echo date('M d, H:i', strtotime($s['sale_date'])); ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="card shadow-sm p-3">
-                        <h6>Stock Level Overview</h6>
-                        <canvas id="stockChart"></canvas>
+                    <div class="col-lg-4">
+                        <div class="premium-card p-4 h-100">
+                            <h5 class="fw-bold mb-4">Stock Overview</h5>
+                            <div class="position-relative" style="height: 250px;">
+                                <canvas id="stockChart"></canvas>
+                            </div>
+                            <div class="mt-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="small text-muted"><i class="bi bi-circle-fill text-accent-emerald me-2"></i>Healthly Stock</span>
+                                    <span class="fw-bold small"><?php echo $total_products - $low_stock; ?> Items</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="small text-muted"><i class="bi bi-circle-fill text-accent-ruby me-2"></i>Low Stock</span>
+                                    <span class="fw-bold small"><?php echo $low_stock; ?> Items</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -131,22 +172,30 @@ $recent_sales = $pdo->query("SELECT s.*, pr.name as product_name FROM sales s JO
     </div>
 </div>
 
+<style>
+    .nav-pills-custom .nav-link { background: var(--bg-light); color: var(--secondary-color); font-size: 0.85rem; padding: 8px 16px; border-radius: 8px; margin-left: 8px; transition: var(--transition); }
+    .nav-pills-custom .nav-link.active { background: var(--accent-sky); color: #fff; }
+    .text-accent-emerald { color: #10b981; }
+</style>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const ctx = document.getElementById('stockChart').getContext('2d');
     new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['In Stock', 'Low Stock'],
+            labels: ['Healthy', 'Low Stock'],
             datasets: [{
                 data: [<?php echo $total_products - $low_stock; ?>, <?php echo $low_stock; ?>],
-                backgroundColor: ['#28a745', '#dc3545'],
+                backgroundColor: ['#10b981', '#ef4444'],
+                hoverOffset: 4,
                 borderWidth: 0
             }]
         },
         options: {
-            cutout: '70%',
-            plugins: { legend: { position: 'bottom' } }
+            maintainAspectRatio: false,
+            cutout: '75%',
+            plugins: { legend: { display: false } }
         }
     });
 </script>

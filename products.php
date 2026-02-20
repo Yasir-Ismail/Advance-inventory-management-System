@@ -53,82 +53,99 @@ $products = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products - IMS</title>
+    <title>Products - IMS Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        .main-content { margin-left: 250px; padding: 20px; }
-        @media (max-width: 768px) { .main-content { margin-left: 0; } }
-        .low-stock { background-color: #ffe5e5 !important; }
-    </style>
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
-<body>
+<body class="bg-light">
 
-<div class="container-fluid">
-    <div class="row">
-        <?php include 'layout/sidebar.php'; ?>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-auto">
+            <?php include 'layout/sidebar.php'; ?>
+        </div>
 
-        <main class="col-md-10 ms-sm-auto main-content">
-            <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Product Management</h1>
+        <!-- Main Content -->
+        <main class="col main-wrapper animate-fade-in">
+            <div class="d-flex justify-content-between align-items-center mb-5">
                 <div>
-                    <a href="utils/export_csv.php?type=products" class="btn btn-outline-success me-2">
-                        <i class="bi bi-file-earmark-excel"></i> Export CSV
+                    <h2 class="fw-bold mb-1">Product Management</h2>
+                    <p class="text-muted small">Manage your inventory products and stock levels</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="utils/export_csv.php?type=products" class="btn btn-outline-success d-flex align-items-center gap-2 px-3 py-2 rounded-3 shadow-sm bg-white border">
+                        <i class="bi bi-file-earmark-excel"></i> <span>Export CSV</span>
                     </a>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal" onclick="resetForm()">
-                        <i class="bi bi-plus-circle"></i> Add Product
+                    <button class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 rounded-3 shadow-sm border-0" data-bs-toggle="modal" data-bs-target="#productModal" onclick="resetForm()">
+                        <i class="bi bi-plus-circle"></i> <span>Add Product</span>
                     </button>
                 </div>
             </div>
 
             <!-- Search Bar -->
-            <form class="mb-4" method="GET">
-                <div class="input-group">
-                    <input type="text" name="search" class="form-control" placeholder="Search by name or category..." value="<?php echo htmlspecialchars($search); ?>">
-                    <button class="btn btn-outline-secondary" type="submit">Search</button>
-                    <?php if ($search): ?>
-                        <a href="products.php" class="btn btn-outline-danger">Clear</a>
-                    <?php endif; ?>
-                </div>
-            </form>
+            <div class="premium-card p-4 mb-4">
+                <form method="GET">
+                    <div class="input-group input-group-lg border rounded-3 overflow-hidden shadow-sm">
+                        <span class="input-group-text bg-white border-0 ps-4"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" name="search" class="form-control border-0 ps-2" placeholder="Search by product name, category..." value="<?php echo htmlspecialchars($search); ?>" style="font-size: 1rem;">
+                        <button class="btn btn-primary px-5 fw-medium border-0" type="submit">Search</button>
+                        <?php if ($search): ?>
+                            <a href="products.php" class="btn btn-outline-danger border-0 d-flex align-items-center px-4">Clear</a>
+                        <?php endif; ?>
+                    </div>
+                </form>
+            </div>
 
             <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Cost</th>
-                            <th>Selling</th>
-                            <th>Qty</th>
-                            <th>Supplier</th>
-                            <th>Actions</th>
+                <table class="table align-middle">
+                    <thead>
+                        <tr class="text-muted small uppercase">
+                            <th class="ps-3">PRODUCT</th>
+                            <th>CATEGORY</th>
+                            <th>COST</th>
+                            <th>SELLING</th>
+                            <th>QUANTITY</th>
+                            <th>SUPPLIER</th>
+                            <th class="text-end pe-3">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($products as $p): ?>
-                            <tr class="<?php echo $p['quantity'] <= $p['low_stock_threshold'] ? 'low-stock' : ''; ?>">
-                                <td><?php echo $p['id']; ?></td>
-                                <td>
-                                    <?php echo $p['name']; ?>
-                                    <?php if ($p['quantity'] <= $p['low_stock_threshold']): ?>
-                                        <span class="badge bg-danger ms-2">Low Stock</span>
-                                    <?php endif; ?>
+                            <tr class="<?php echo $p['quantity'] <= $p['low_stock_threshold'] ? 'low-stock-row' : ''; ?>">
+                                <td class="ps-3 py-4">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="product-icon-box bg-light rounded-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-box text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold"><?php echo $p['name']; ?></div>
+                                            <div class="text-muted small">ID: #<?php echo $p['id']; ?></div>
+                                        </div>
+                                        <?php if ($p['quantity'] <= $p['low_stock_threshold']): ?>
+                                            <span class="badge rounded-pill bg-danger-subtle text-danger px-3">Low Stock</span>
+                                        <?php endif; ?>
+                                    </div>
                                 </td>
-                                <td><span class="badge bg-secondary"><?php echo $p['category']; ?></span></td>
-                                <td>$<?php echo number_format($p['cost_price'], 2); ?></td>
-                                <td>$<?php echo number_format($p['selling_price'], 2); ?></td>
-                                <td class="fw-bold"><?php echo $p['quantity']; ?></td>
-                                <td><?php echo $p['supplier_name'] ?: 'N/A'; ?></td>
+                                <td><span class="badge bg-light text-dark fw-normal px-3 py-2"><?php echo $p['category']; ?></span></td>
+                                <td class="text-muted fw-medium">$<?php echo number_format($p['cost_price'], 2); ?></td>
+                                <td class="fw-bold text-dark">$<?php echo number_format($p['selling_price'], 2); ?></td>
                                 <td>
-                                    <button class="btn btn-sm btn-info text-white" onclick='editProduct(<?php echo json_encode($p); ?>)'>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="fw-bold <?php echo $p['quantity'] <= $p['low_stock_threshold'] ? 'text-danger' : 'text-primary'; ?>"><?php echo $p['quantity']; ?></span>
+                                        <span class="text-muted small">in stock</span>
+                                    </div>
+                                </td>
+                                <td class="text-muted small"><?php echo $p['supplier_name'] ?: 'N/A'; ?></td>
+                                <td class="text-end pe-3">
+                                    <button class="btn btn-action-edit me-2" onclick='editProduct(<?php echo json_encode($p); ?>)'>
                                         <i class="bi bi-pencil-square"></i>
                                     </button>
                                     <form method="POST" class="d-inline" onsubmit="return confirm('Delete this product?')">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id" value="<?php echo $p['id']; ?>">
-                                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                        <button class="btn btn-action-delete text-danger"><i class="bi bi-trash"></i></button>
                                     </form>
                                 </td>
                             </tr>
@@ -139,6 +156,13 @@ $products = $stmt->fetchAll();
         </main>
     </div>
 </div>
+
+<style>
+    .low-stock-row { border-left: 4px solid var(--accent-ruby) !important; }
+    .btn-action-edit, .btn-action-delete { border: none; background: #f8fafc; border-radius: 8px; width: 36px; height: 36px; transition: var(--transition); }
+    .btn-action-edit:hover { background: #e0f2fe; color: #0284c7; }
+    .btn-action-delete:hover { background: #fee2e2; color: #ef4444; }
+</style>
 
 <!-- Product Modal -->
 <div class="modal fade" id="productModal" tabindex="-1">

@@ -46,67 +46,77 @@ $suppliers = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suppliers - IMS</title>
+    <title>Suppliers - IMS Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        .main-content { margin-left: 250px; padding: 20px; }
-        @media (max-width: 768px) { .main-content { margin-left: 0; } }
-    </style>
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
-<body>
+<body class="bg-light">
 
-<div class="container-fluid">
-    <div class="row">
-        <?php include 'layout/sidebar.php'; ?>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-auto">
+            <?php include 'layout/sidebar.php'; ?>
+        </div>
 
-        <main class="col-md-10 ms-sm-auto main-content">
-            <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Supplier Management</h1>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#supplierModal" onclick="resetForm()">
-                    <i class="bi bi-plus-circle"></i> Add Supplier
+        <!-- Main Content -->
+        <main class="col main-wrapper animate-fade-in">
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <h2 class="fw-bold mb-1">Supplier Management</h2>
+                    <p class="text-muted small">Manage your product suppliers and contact details</p>
+                </div>
+                <button class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 rounded-3 shadow-sm border-0" data-bs-toggle="modal" data-bs-target="#supplierModal" onclick="resetForm()">
+                    <i class="bi bi-plus-circle"></i> <span>Add Supplier</span>
                 </button>
             </div>
 
             <!-- Search Bar -->
-            <form class="mb-4" method="GET">
-                <div class="input-group">
-                    <input type="text" name="search" class="form-control" placeholder="Search suppliers..." value="<?php echo htmlspecialchars($search); ?>">
-                    <button class="btn btn-outline-secondary" type="submit">Search</button>
-                    <?php if ($search): ?>
-                        <a href="suppliers.php" class="btn btn-outline-danger">Clear</a>
-                    <?php endif; ?>
-                </div>
-            </form>
+            <div class="premium-card p-4 mb-4">
+                <form method="GET">
+                    <div class="input-group input-group-lg border rounded-3 overflow-hidden shadow-sm">
+                        <span class="input-group-text bg-white border-0 ps-4"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" name="search" class="form-control border-0 ps-2" placeholder="Search suppliers by name, email, or phone..." value="<?php echo htmlspecialchars($search); ?>" style="font-size: 1rem;">
+                        <button class="btn btn-primary px-5 fw-medium border-0" type="submit">Search</button>
+                        <?php if ($search): ?>
+                            <a href="suppliers.php" class="btn btn-outline-danger border-0 d-flex align-items-center px-4">Clear</a>
+                        <?php endif; ?>
+                    </div>
+                </form>
+            </div>
 
             <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th>Address</th>
-                            <th>Actions</th>
+                <table class="table align-middle">
+                    <thead>
+                        <tr class="text-muted small uppercase">
+                            <th class="ps-3">ID</th>
+                            <th>SUPPLIER NAME</th>
+                            <th>CONTACT INFO</th>
+                            <th>ADDRESS</th>
+                            <th class="text-end pe-3">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($suppliers as $s): ?>
                             <tr>
-                                <td><?php echo $s['id']; ?></td>
-                                <td class="fw-bold"><?php echo $s['name']; ?></td>
-                                <td><?php echo $s['phone']; ?></td>
-                                <td><?php echo $s['email']; ?></td>
-                                <td><?php echo $s['address']; ?></td>
+                                <td class="ps-3 py-4 text-muted small">#<?php echo $s['id']; ?></td>
+                                <td class="fw-bold text-dark"><?php echo $s['name']; ?></td>
                                 <td>
-                                    <button class="btn btn-sm btn-info text-white" onclick='editSupplier(<?php echo json_encode($s); ?>)'>
+                                    <div class="d-flex flex-column">
+                                        <span class="small fw-medium"><i class="bi bi-telephone text-muted me-2"></i><?php echo $s['phone']; ?></span>
+                                        <span class="small text-muted"><i class="bi bi-envelope text-muted me-2"></i><?php echo $s['email']; ?></span>
+                                    </div>
+                                </td>
+                                <td class="text-muted small" style="max-width: 250px;"><?php echo $s['address']; ?></td>
+                                <td class="text-end pe-3">
+                                    <button class="btn btn-action-edit me-2" onclick='editSupplier(<?php echo json_encode($s); ?>)'>
                                         <i class="bi bi-pencil-square"></i>
                                     </button>
                                     <form method="POST" class="d-inline" onsubmit="return confirm('Delete this supplier?')">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id" value="<?php echo $s['id']; ?>">
-                                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                        <button class="btn btn-action-delete text-danger"><i class="bi bi-trash"></i></button>
                                     </form>
                                 </td>
                             </tr>
@@ -117,6 +127,12 @@ $suppliers = $stmt->fetchAll();
         </main>
     </div>
 </div>
+
+<style>
+    .btn-action-edit, .btn-action-delete { border: none; background: #f8fafc; border-radius: 8px; width: 36px; height: 36px; transition: var(--transition); }
+    .btn-action-edit:hover { background: #e0f2fe; color: #0284c7; }
+    .btn-action-delete:hover { background: #fee2e2; color: #ef4444; }
+</style>
 
 <!-- Supplier Modal -->
 <div class="modal fade" id="supplierModal" tabindex="-1">
